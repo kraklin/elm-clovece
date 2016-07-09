@@ -3,14 +3,17 @@ module Main exposing (..)
 import Html exposing (Html, div, button, text, h1, img)
 import Html.Attributes exposing (..)
 import Html.App as Html
+import TimeTravel.Html.App as TimeTravel
+
 import Html.Events exposing (onClick, onDoubleClick, onMouseOut)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
+import Dict exposing (..)
 
 
 main : Program Never
 main =
-    Html.beginnerProgram
+    TimeTravel.beginnerProgram
         { model = model
         , view = view
         , update = update
@@ -23,7 +26,7 @@ main =
 
 type alias Model =
     { selectedPosition : Maybe Int
-    , players : List Player
+    , players : Dict String Player
     , diceValue : Int
     }
 
@@ -32,35 +35,44 @@ model : Model
 model =
     { selectedPosition = Nothing
     , players =
-        [ { name = "Red"
-          , color = "#f9004e"
-          , startingPosition = 1
-          , finishLine = [41..44]
-          , homePositions = [57..60]
-          , meeplesPositions = [ 15, 58, 3, 60 ]
-          }
-        , { name = "Green"
-          , color = "#b9d221"
-          , startingPosition = 11
-          , finishLine = [45..48]
-          , homePositions = [61..64]
-          , meeplesPositions = [61..64]
-          }
-        , { name = "Blue"
-          , color = "#2196d2"
-          , startingPosition = 21
-          , finishLine = [49..52]
-          , homePositions = [69..72]
-          , meeplesPositions = [69..72]
-          }
-        , { name = "Yellow"
-          , color = "#ffc300"
-          , startingPosition = 31
-          , finishLine = [53..56]
-          , homePositions = [65..68]
-          , meeplesPositions = [65..68]
-          }
-        ]
+        Dict.fromList
+            [ ( "Red"
+              , { name = "Red"
+                , color = "#f9004e"
+                , startingPosition = 1
+                , finishLine = [41..44]
+                , homePositions = [57..60]
+                , meeplesPositions = [ 15, 58, 3, 60 ]
+                }
+              )
+            , ( "Green"
+              , { name = "Green"
+                , color = "#b9d221"
+                , startingPosition = 11
+                , finishLine = [45..48]
+                , homePositions = [61..64]
+                , meeplesPositions = [61..64]
+                }
+              )
+            , ( "Blue"
+              , { name = "Blue"
+                , color = "#2196d2"
+                , startingPosition = 21
+                , finishLine = [49..52]
+                , homePositions = [69..72]
+                , meeplesPositions = [69..72]
+                }
+              )
+            , ( "Yellow"
+              , { name = "Yellow"
+                , color = "#ffc300"
+                , startingPosition = 31
+                , finishLine = [53..56]
+                , homePositions = [65..68]
+                , meeplesPositions = [65..68]
+                }
+              )
+            ]
     , diceValue = 3
     }
 
@@ -93,34 +105,51 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Move fromPosition ->
-            { model
-                | players =
-                    List.map
-                        (\player ->
-                            if List.member fromPosition player.meeplesPositions then
-                                { player
-                                    | meeplesPositions =
-                                        List.map
-                                            (\m ->
-                                                if m == fromPosition then
-                                                    moveMeeple model.players player m model.diceValue
-                                                else
-                                                    m
-                                            )
-                                            player.meeplesPositions
-                                }
-                            else
-                                player
-                        )
+            let
+                playerName =
+                    getPlayerNameForMeeplePosition model.players fromPosition
+            in
+                { model
+                    | players =
                         model.players
-            }
+                            |> Dict.update playerName (\p -> updatePlayerPosition p fromPosition model.diceValue)
+                }
 
-moveMeeple : List Player -> Player -> Int -> Int -> Int
-moveMeeple players player position moveBy =
-    let newPosition =
-        getNewMeeplePosition player position moveBy
+
+getPlayerNameForMeeplePosition : Dict String Player -> Int -> String
+getPlayerNameForMeeplePosition players position =
+    "Green"
+
+
+updatePlayerPosition : Maybe Player -> Int -> Int -> Maybe Player
+updatePlayerPosition p position diceValue =
+    case p of
+        Just player ->
+            Just
+                { player
+                    | meeplesPositions =
+                        List.map
+                            (\m ->
+                                if m == position then
+                                    moveMeeple player m diceValue
+                                else
+                                    m
+                            )
+                            player.meeplesPositions
+                }
+
+        Nothing ->
+            Nothing
+
+
+moveMeeple : Player -> Int -> Int -> Int
+moveMeeple player position moveBy =
+    let
+        newPosition =
+            getNewMeeplePosition player position moveBy
     in
         newPosition
+
 
 getNewMeeplePosition : Player -> Int -> Int -> Int
 getNewMeeplePosition player position moveBy =
@@ -136,16 +165,22 @@ getNewMeeplePosition player position moveBy =
     else
         position + moveBy
 
+
 kickMeeple : Player -> Int -> Int
 kickMeeple player position =
     if List.member position player.homePositions then
         position
     else
         case List.head (List.filter (\home -> not (List.member home player.meeplesPositions)) player.homePositions) of
-        Just newPosition -> newPosition
-        Nothing -> position
-    --kick
+            Just newPosition ->
+                newPosition
 
+            Nothing ->
+                position
+
+
+
+--kick
 -- VIEW
 
 
@@ -241,58 +276,64 @@ getCoordsForPosition position =
     in
         { x = size * toFloat (fst xy) + offset, y = size * toFloat (snd xy) + offset }
 
+inInterval : (Int, Int) -> Int -> Bool
+inInterval interval toCheck =
+    let lower = fst interval
+        higher = snd interval
+    in
+        toCheck >= lower && toCheck <= higher
 
 getXYForPosition : Int -> ( Int, Int )
 getXYForPosition position =
     -- first quadrant
-    if position >= 1 && position <= 4 then
+    if position |> inInterval (1,4) then
         ( (position - 1), 4 )
-    else if List.member position [5..9] then
+    else if position |> inInterval (5,9) then
         ( 4, (4 - (position - 5)) )
     else if position == 10 then
         ( 5, 0 )
         -- second quadrant
-    else if List.member position [11..15] then
+    else if position |> inInterval (11,15) then
         ( 6, (position - 11) )
-    else if List.member position [16..19] then
+    else if position |> inInterval (16,19) then
         ( (position - 9), 4 )
     else if position == 20 then
         ( 10, 5 )
         -- third quadrant
-    else if List.member position [21..25] then
+    else if position |> inInterval (21,25) then
         ( (11 - (position - 20)), 6 )
-    else if List.member position [26..29] then
+    else if position |> inInterval (26,29) then
         ( 6, (7 + position - 26) )
     else if position == 30 then
         ( 5, 10 )
         -- fourth quadrant
-    else if List.member position [31..35] then
+    else if position |> inInterval (31,35) then
         ( 4, (10 - (position - 31)) )
-    else if List.member position [36..39] then
+    else if position |> inInterval (36,39) then
         ( (3 - (position - 36)), 6 )
     else if position == 40 then
         ( 0, 5 )
         -- finish lines
-    else if List.member position [41..44] then
+    else if position |> inInterval (41,44) then
         ( (1 + (position - 41)), 5 )
-    else if List.member position [45..48] then
+    else if position |> inInterval (45,48) then
         ( 5, 1 + (position - 45) )
-    else if List.member position [49..52] then
+    else if position |> inInterval (49,52) then
         ( (9 - (position - 49)), 5 )
-    else if List.member position [53..56] then
+    else if position |> inInterval (53,56) then
         ( 5, 9 - (position - 53) )
         -- homes
-    else if List.member position [57..60] then
+    else if position |> inInterval (57,60) then
         ( (position - 57) % 2, (position - 57) // 2 )
-    else if List.member position [61..64] then
+    else if position |> inInterval (61,64) then
         ( 9 + (position - 61) % 2, (position - 61) // 2 )
-    else if List.member position [65..68] then
+    else if position |> inInterval (65,68) then
         ( (position - 65) % 2, 9 + (position - 65) // 2 )
-    else if List.member position [69..72] then
+    else if position |> inInterval (69,72) then
         ( 9 + (position - 69) % 2, 9 + (position - 69) // 2 )
-        -- default
+        -- default outside of visible area
     else
-        ( 11, 11 )
+        ( -100, -100 )
 
 
 renderText : Point -> String -> Svg.Svg Msg
@@ -303,9 +344,9 @@ renderText point innerText =
 renderBlock : Model -> List (Svg.Svg Msg)
 renderBlock model =
     List.concat
-        [ List.map (\position -> (renderCircle position (getColorForPosition model.players position))) [1..72]
+        [ List.map (\position -> (renderCircle position (getColorForPosition (Dict.values model.players) position))) [1..72]
         , List.map (\position -> renderText (getCoordsForPosition position) (toString position)) [1..72]
-        , List.concatMap (\p -> renderMeeplesForPlayer p) model.players
+        , List.concatMap (\p -> renderMeeplesForPlayer p) (Dict.values model.players)
         ]
 
 
