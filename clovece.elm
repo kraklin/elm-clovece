@@ -3,7 +3,7 @@ module Main exposing (..)
 import Html exposing (Html, div, button, text, h1, img)
 import Html.Attributes exposing (..)
 import Html.App as Html
-import Html.Events exposing (onClick, onMouseOver, onMouseOut)
+import Html.Events exposing (onClick, onDoubleClick, onMouseOut)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 
@@ -37,7 +37,7 @@ model =
           , startingPosition = 1
           , finishLine = [41..44]
           , homePositions = [57..60]
-          , meeplesPositions = [ 57, 58, 59, 20 ]
+          , meeplesPositions = [ 15, 58, 3, 60 ]
           }
         , { name = "Green"
           , color = "#b9d221"
@@ -50,15 +50,15 @@ model =
           , color = "#2196d2"
           , startingPosition = 21
           , finishLine = [49..52]
-          , homePositions = [65..68]
-          , meeplesPositions = [65..68]
+          , homePositions = [69..72]
+          , meeplesPositions = [69..72]
           }
         , { name = "Yellow"
           , color = "#ffc300"
           , startingPosition = 31
           , finishLine = [53..56]
-          , homePositions = [69..72]
-          , meeplesPositions = [69..72]
+          , homePositions = [65..68]
+          , meeplesPositions = [65..68]
           }
         ]
     , diceValue = 3
@@ -86,16 +86,65 @@ type alias Player =
 
 
 type Msg
-    = Noop
+    = Move Int
 
 
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        Noop ->
-            model
+        Move fromPosition ->
+            { model
+                | players =
+                    List.map
+                        (\player ->
+                            if List.member fromPosition player.meeplesPositions then
+                                { player
+                                    | meeplesPositions =
+                                        List.map
+                                            (\m ->
+                                                if m == fromPosition then
+                                                    moveMeeple model.players player m model.diceValue
+                                                else
+                                                    m
+                                            )
+                                            player.meeplesPositions
+                                }
+                            else
+                                player
+                        )
+                        model.players
+            }
 
+moveMeeple : List Player -> Player -> Int -> Int -> Int
+moveMeeple players player position moveBy =
+    let newPosition =
+        getNewMeeplePosition player position moveBy
+    in
+        newPosition
 
+getNewMeeplePosition : Player -> Int -> Int -> Int
+getNewMeeplePosition player position moveBy =
+    -- move from home to starting position
+    if List.member position player.homePositions then
+        player.startingPosition
+    else
+    -- cross over 40
+    if
+        (position + moveBy) > 40
+    then
+        (position + moveBy) % 40
+    else
+        position + moveBy
+
+kickMeeple : Player -> Int -> Int
+kickMeeple player position =
+    if List.member position player.homePositions then
+        position
+    else
+        case List.head (List.filter (\home -> not (List.member home player.meeplesPositions)) player.homePositions) of
+        Just newPosition -> newPosition
+        Nothing -> position
+    --kick
 
 -- VIEW
 
@@ -114,6 +163,7 @@ renderMeeple position color =
             , fill color
             , fillOpacity "0.7"
             , strokeWidth "1.5"
+            , onClick (Move position)
             ]
             []
 
@@ -256,7 +306,6 @@ renderBlock model =
         [ List.map (\position -> (renderCircle position (getColorForPosition model.players position))) [1..72]
         , List.map (\position -> renderText (getCoordsForPosition position) (toString position)) [1..72]
         , List.concatMap (\p -> renderMeeplesForPlayer p) model.players
-        , [ renderMeeple 6 "#ff00ff" ]
         ]
 
 
