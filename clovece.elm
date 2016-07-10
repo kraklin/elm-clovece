@@ -4,7 +4,6 @@ import Html exposing (Html, div, button, text, h1, img)
 import Html.Attributes exposing (..)
 import Html.App as Html
 import TimeTravel.Html.App as TimeTravel
-
 import Html.Events exposing (onClick, onDoubleClick, onMouseOut)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
@@ -108,47 +107,46 @@ update msg model =
             let
                 playerName =
                     getPlayerNameForMeeplePosition model.players fromPosition
+
+                player =
+                    model.players |> Dict.get playerName
+
+                toPosition =
+                    getToPositionForPlayer player fromPosition model.diceValue
             in
                 { model
                     | players =
                         model.players
-                            |> Dict.update playerName (\p -> updatePlayerPosition p fromPosition model.diceValue)
+                            -- fce players -> playerName -> from -> to
+                            |>
+                                updatePosition fromPosition toPosition
                 }
 
 
 getPlayerNameForMeeplePosition : Dict String Player -> Int -> String
 getPlayerNameForMeeplePosition players position =
-    "Green"
+    let
+        filteredPlayer =
+            Dict.values players
+                |> List.filter (\p -> List.member position p.meeplesPositions)
+                |> List.head
+    in
+        case filteredPlayer of
+            Just player ->
+                player.name
+
+            Nothing ->
+                ""
 
 
-updatePlayerPosition : Maybe Player -> Int -> Int -> Maybe Player
-updatePlayerPosition p position diceValue =
-    case p of
+getToPositionForPlayer : Maybe Player -> Int -> Int -> Int
+getToPositionForPlayer player position moveBy =
+    case player of
         Just player ->
-            Just
-                { player
-                    | meeplesPositions =
-                        List.map
-                            (\m ->
-                                if m == position then
-                                    moveMeeple player m diceValue
-                                else
-                                    m
-                            )
-                            player.meeplesPositions
-                }
+            getNewMeeplePosition player position moveBy
 
         Nothing ->
-            Nothing
-
-
-moveMeeple : Player -> Int -> Int -> Int
-moveMeeple player position moveBy =
-    let
-        newPosition =
-            getNewMeeplePosition player position moveBy
-    in
-        newPosition
+            position
 
 
 getNewMeeplePosition : Player -> Int -> Int -> Int
@@ -166,6 +164,27 @@ getNewMeeplePosition player position moveBy =
         position + moveBy
 
 
+updatePosition : Int -> Int -> Dict String Player -> Dict String Player
+updatePosition from to players =
+    players
+        |> Dict.map
+            (\name player ->
+                { player
+                    | meeplesPositions =
+                        player.meeplesPositions
+                            |> List.map
+                                (\m ->
+                                    if m == from then
+                                        to
+                                    else if m == to then
+                                        kickMeeple player to
+                                    else
+                                        m
+                                )
+                }
+            )
+
+
 kickMeeple : Player -> Int -> Int
 kickMeeple player position =
     if List.member position player.homePositions then
@@ -180,7 +199,6 @@ kickMeeple player position =
 
 
 
---kick
 -- VIEW
 
 
@@ -276,60 +294,66 @@ getCoordsForPosition position =
     in
         { x = size * toFloat (fst xy) + offset, y = size * toFloat (snd xy) + offset }
 
-inInterval : (Int, Int) -> Int -> Bool
+
+inInterval : ( Int, Int ) -> Int -> Bool
 inInterval interval toCheck =
-    let lower = fst interval
-        higher = snd interval
+    let
+        lower =
+            fst interval
+
+        higher =
+            snd interval
     in
         toCheck >= lower && toCheck <= higher
+
 
 getXYForPosition : Int -> ( Int, Int )
 getXYForPosition position =
     -- first quadrant
-    if position |> inInterval (1,4) then
+    if position |> inInterval ( 1, 4 ) then
         ( (position - 1), 4 )
-    else if position |> inInterval (5,9) then
+    else if position |> inInterval ( 5, 9 ) then
         ( 4, (4 - (position - 5)) )
     else if position == 10 then
         ( 5, 0 )
         -- second quadrant
-    else if position |> inInterval (11,15) then
+    else if position |> inInterval ( 11, 15 ) then
         ( 6, (position - 11) )
-    else if position |> inInterval (16,19) then
+    else if position |> inInterval ( 16, 19 ) then
         ( (position - 9), 4 )
     else if position == 20 then
         ( 10, 5 )
         -- third quadrant
-    else if position |> inInterval (21,25) then
+    else if position |> inInterval ( 21, 25 ) then
         ( (11 - (position - 20)), 6 )
-    else if position |> inInterval (26,29) then
+    else if position |> inInterval ( 26, 29 ) then
         ( 6, (7 + position - 26) )
     else if position == 30 then
         ( 5, 10 )
         -- fourth quadrant
-    else if position |> inInterval (31,35) then
+    else if position |> inInterval ( 31, 35 ) then
         ( 4, (10 - (position - 31)) )
-    else if position |> inInterval (36,39) then
+    else if position |> inInterval ( 36, 39 ) then
         ( (3 - (position - 36)), 6 )
     else if position == 40 then
         ( 0, 5 )
         -- finish lines
-    else if position |> inInterval (41,44) then
+    else if position |> inInterval ( 41, 44 ) then
         ( (1 + (position - 41)), 5 )
-    else if position |> inInterval (45,48) then
+    else if position |> inInterval ( 45, 48 ) then
         ( 5, 1 + (position - 45) )
-    else if position |> inInterval (49,52) then
+    else if position |> inInterval ( 49, 52 ) then
         ( (9 - (position - 49)), 5 )
-    else if position |> inInterval (53,56) then
+    else if position |> inInterval ( 53, 56 ) then
         ( 5, 9 - (position - 53) )
         -- homes
-    else if position |> inInterval (57,60) then
+    else if position |> inInterval ( 57, 60 ) then
         ( (position - 57) % 2, (position - 57) // 2 )
-    else if position |> inInterval (61,64) then
+    else if position |> inInterval ( 61, 64 ) then
         ( 9 + (position - 61) % 2, (position - 61) // 2 )
-    else if position |> inInterval (65,68) then
+    else if position |> inInterval ( 65, 68 ) then
         ( (position - 65) % 2, 9 + (position - 65) // 2 )
-    else if position |> inInterval (69,72) then
+    else if position |> inInterval ( 69, 72 ) then
         ( 9 + (position - 69) % 2, 9 + (position - 69) // 2 )
         -- default outside of visible area
     else
