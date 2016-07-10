@@ -8,6 +8,7 @@ import Html.Events exposing (onClick, onDoubleClick, onMouseOut)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Dict exposing (..)
+import Counter exposing (..)
 
 
 main : Program Never
@@ -26,7 +27,7 @@ main =
 type alias Model =
     { selectedPosition : Maybe Int
     , players : Dict String Player
-    , diceValue : Int
+    , dice : Counter.Model
     }
 
 
@@ -72,7 +73,7 @@ model =
                 }
               )
             ]
-    , diceValue = 3
+    , dice = Counter.init 3
     }
 
 
@@ -98,7 +99,7 @@ type alias Player =
 
 type Msg
     = Move Int
-
+    | ChangeCounter Counter.Msg
 
 update : Msg -> Model -> Model
 update msg model =
@@ -112,7 +113,7 @@ update msg model =
                     model.players |> Dict.get playerName
 
                 toPosition =
-                    getToPositionForPlayer player fromPosition model.diceValue
+                    getToPositionForPlayer player fromPosition model.dice
             in
                 { model
                     | players =
@@ -122,6 +123,8 @@ update msg model =
                                 updatePosition fromPosition toPosition
                 }
 
+        ChangeCounter msg ->
+            { model | dice = Counter.update msg model.dice} 
 
 getPlayerNameForMeeplePosition : Dict String Player -> Int -> String
 getPlayerNameForMeeplePosition players position =
@@ -159,7 +162,10 @@ getNewMeeplePosition player position moveBy =
     if
         (position + moveBy) > 40
     then
-        (position + moveBy) % 40
+        if player.name /= "Red" then
+            (position + moveBy) % 40
+        else
+            position
     else
         position + moveBy
 
@@ -177,6 +183,8 @@ updatePosition from to players =
                                     if m == from then
                                         to
                                     else if m == to then
+                                        let fromTo = to
+                                        in
                                         kickMeeple player to
                                     else
                                         m
@@ -201,6 +209,14 @@ kickMeeple player position =
 
 -- VIEW
 
+
+view : Model -> Html Msg
+view model =
+    div []
+        [ h1 [] [ Html.text ("(elm) - Clovece, nezlob se") ]
+        , svg [ viewBox "0 -5 100 110", Svg.Attributes.width "600px" ] (renderBlock model)
+        , Html.map ChangeCounter (Counter.view model.dice)
+        ]
 
 renderMeeple : Int -> String -> Svg.Svg Msg
 renderMeeple position color =
@@ -371,12 +387,4 @@ renderBlock model =
         [ List.map (\position -> (renderCircle position (getColorForPosition (Dict.values model.players) position))) [1..72]
         , List.map (\position -> renderText (getCoordsForPosition position) (toString position)) [1..72]
         , List.concatMap (\p -> renderMeeplesForPlayer p) (Dict.values model.players)
-        ]
-
-
-view : Model -> Html Msg
-view model =
-    div []
-        [ h1 [] [ Html.text ("(elm) - Clovece, nezlob se") ]
-        , svg [ viewBox "0 -5 100 110", Svg.Attributes.width "600px" ] (renderBlock model)
         ]
