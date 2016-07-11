@@ -119,9 +119,7 @@ update msg model =
                 { model
                     | players =
                         model.players
-                            -- fce players -> playerName -> from -> to
-                            |>
-                                updatePosition fromPosition toPosition
+                            |> updatePosition fromPosition toPosition
                 }
 
         ChangeCounter msg ->
@@ -165,16 +163,18 @@ getNewMeeplePosition player position moveBy =
             position
             -- move from home to starting position
         else if List.member position player.homePositions then
-            if moveBy == 6 then 
+            if moveBy == 6 then
                 player.startingPosition
             else
                 position
             -- unless you reach the end of standard plane, move
         else if newTranslatedPos <= 39 then
             fromOrigin player.startingPosition newTranslatedPos
-        else
+        else if newTranslatedPos |> inInterval (40,43) then
             -- go to finish line
             (newTranslatedPos - 40) + (firstHomePosition player)
+        else
+            position
 
 
 toOrigin : Int -> Int -> Int
