@@ -154,21 +154,26 @@ getToPositionForPlayer player position moveBy =
 
 getNewMeeplePosition : Player -> Int -> Int -> Int
 getNewMeeplePosition player position moveBy =
+    let newTranslatedPos = (toOrigin player.startingPosition position) + moveBy
+
+    in
     -- move from home to starting position
     if List.member position player.homePositions then
         player.startingPosition
     else
     -- cross over 40
-    if
-        (position + moveBy) > 39
-    then
-        if player.name /= "Red" then
-            (position + moveBy) % 40
-        else
-            position
+    if newTranslatedPos > 39 then
+        position
     else
-        position + moveBy
+        fromOrigin player.startingPosition newTranslatedPos
 
+toOrigin: Int -> Int -> Int
+toOrigin startingPosition position =
+    (position - startingPosition) % 40
+
+fromOrigin: Int -> Int -> Int
+fromOrigin startingPosition translatedPos =
+    (translatedPos + startingPosition) % 40
 
 updatePosition : Int -> Int -> Dict String Player -> Dict String Player
 updatePosition from to players =
