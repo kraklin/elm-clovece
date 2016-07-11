@@ -39,37 +39,37 @@ model =
             [ ( "Red"
               , { name = "Red"
                 , color = "#f9004e"
-                , startingPosition = 1
-                , finishLine = [41..44]
-                , homePositions = [57..60]
-                , meeplesPositions = [ 15, 58, 3, 60 ]
+                , startingPosition = 0
+                , finishLine = [40..43]
+                , homePositions = [56..59]
+                , meeplesPositions = [ 14, 57, 2, 59 ]
                 }
               )
             , ( "Green"
               , { name = "Green"
                 , color = "#b9d221"
-                , startingPosition = 11
-                , finishLine = [45..48]
-                , homePositions = [61..64]
-                , meeplesPositions = [61..64]
+                , startingPosition = 10
+                , finishLine = [44..47]
+                , homePositions = [60..63]
+                , meeplesPositions = [60..63]
                 }
               )
             , ( "Blue"
               , { name = "Blue"
                 , color = "#2196d2"
-                , startingPosition = 21
-                , finishLine = [49..52]
-                , homePositions = [69..72]
-                , meeplesPositions = [69..72]
+                , startingPosition = 20
+                , finishLine = [48..51]
+                , homePositions = [68..71]
+                , meeplesPositions = [68..71]
                 }
               )
             , ( "Yellow"
               , { name = "Yellow"
                 , color = "#ffc300"
-                , startingPosition = 31
-                , finishLine = [53..56]
-                , homePositions = [65..68]
-                , meeplesPositions = [65..68]
+                , startingPosition = 30
+                , finishLine = [52..55]
+                , homePositions = [64..67]
+                , meeplesPositions = [64..67]
                 }
               )
             ]
@@ -160,7 +160,7 @@ getNewMeeplePosition player position moveBy =
     else
     -- cross over 40
     if
-        (position + moveBy) > 40
+        (position + moveBy) > 39
     then
         if player.name /= "Red" then
             (position + moveBy) % 40
@@ -326,51 +326,51 @@ inInterval interval toCheck =
 getXYForPosition : Int -> ( Int, Int )
 getXYForPosition position =
     -- first quadrant
-    if position |> inInterval ( 1, 4 ) then
-        ( (position - 1), 4 )
-    else if position |> inInterval ( 5, 9 ) then
-        ( 4, (4 - (position - 5)) )
-    else if position == 10 then
+    if position |> inInterval ( 0, 3 ) then
+        ( position, 4 )
+    else if position |> inInterval ( 4, 8 ) then
+        ( 4, (4 - (position - 4)) )
+    else if position == 9 then
         ( 5, 0 )
         -- second quadrant
-    else if position |> inInterval ( 11, 15 ) then
-        ( 6, (position - 11) )
-    else if position |> inInterval ( 16, 19 ) then
-        ( (position - 9), 4 )
-    else if position == 20 then
+    else if position |> inInterval ( 10, 14 ) then
+        ( 6, (position - 10) )
+    else if position |> inInterval ( 15, 18 ) then
+        ( (position - 8), 4 )
+    else if position == 19 then
         ( 10, 5 )
         -- third quadrant
-    else if position |> inInterval ( 21, 25 ) then
-        ( (11 - (position - 20)), 6 )
-    else if position |> inInterval ( 26, 29 ) then
-        ( 6, (7 + position - 26) )
-    else if position == 30 then
+    else if position |> inInterval ( 20, 24 ) then
+        ( (10 - (position - 20)), 6 )
+    else if position |> inInterval ( 25, 28 ) then
+        ( 6, (7 + position - 25) )
+    else if position == 29 then
         ( 5, 10 )
         -- fourth quadrant
-    else if position |> inInterval ( 31, 35 ) then
-        ( 4, (10 - (position - 31)) )
-    else if position |> inInterval ( 36, 39 ) then
-        ( (3 - (position - 36)), 6 )
-    else if position == 40 then
+    else if position |> inInterval ( 30, 34 ) then
+        ( 4, (10 - (position - 30)) )
+    else if position |> inInterval ( 35, 38 ) then
+        ( (3 - (position - 35)), 6 )
+    else if position == 39 then
         ( 0, 5 )
         -- finish lines
-    else if position |> inInterval ( 41, 44 ) then
-        ( (1 + (position - 41)), 5 )
-    else if position |> inInterval ( 45, 48 ) then
-        ( 5, 1 + (position - 45) )
-    else if position |> inInterval ( 49, 52 ) then
-        ( (9 - (position - 49)), 5 )
-    else if position |> inInterval ( 53, 56 ) then
-        ( 5, 9 - (position - 53) )
+    else if position |> inInterval ( 40, 43 ) then
+        ( (1 + (position - 40)), 5 )
+    else if position |> inInterval ( 44, 47 ) then
+        ( 5, 1 + (position - 44) )
+    else if position |> inInterval ( 48, 51 ) then
+        ( (9 - (position - 48)), 5 )
+    else if position |> inInterval ( 52, 55 ) then
+        ( 5, 9 - (position - 52) )
         -- homes
-    else if position |> inInterval ( 57, 60 ) then
-        ( (position - 57) % 2, (position - 57) // 2 )
-    else if position |> inInterval ( 61, 64 ) then
-        ( 9 + (position - 61) % 2, (position - 61) // 2 )
-    else if position |> inInterval ( 65, 68 ) then
-        ( (position - 65) % 2, 9 + (position - 65) // 2 )
-    else if position |> inInterval ( 69, 72 ) then
-        ( 9 + (position - 69) % 2, 9 + (position - 69) // 2 )
+    else if position |> inInterval ( 56, 59 ) then
+        ( (position - 56) % 2, (position - 56) // 2 )
+    else if position |> inInterval ( 60, 63 ) then
+        ( 9 + (position - 60) % 2, (position - 60) // 2 )
+    else if position |> inInterval ( 64, 67 ) then
+        ( (position - 64) % 2, 9 + (position - 64) // 2 )
+    else if position |> inInterval ( 68, 71 ) then
+        ( 9 + (position - 68) % 2, 9 + (position - 68) // 2 )
         -- default outside of visible area
     else
         ( -100, -100 )
@@ -384,7 +384,7 @@ renderText point innerText =
 renderBlock : Model -> List (Svg.Svg Msg)
 renderBlock model =
     List.concat
-        [ List.map (\position -> (renderCircle position (getColorForPosition (Dict.values model.players) position))) [1..72]
-        , List.map (\position -> renderText (getCoordsForPosition position) (toString position)) [1..72]
+        [ List.map (\position -> (renderCircle position (getColorForPosition (Dict.values model.players) position))) [0..71]
+        , List.map (\position -> renderText (getCoordsForPosition position) (toString position)) [0..71]
         , List.concatMap (\p -> renderMeeplesForPlayer p) (Dict.values model.players)
         ]
