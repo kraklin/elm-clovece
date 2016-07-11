@@ -165,7 +165,10 @@ getNewMeeplePosition player position moveBy =
             position
             -- move from home to starting position
         else if List.member position player.homePositions then
-            player.startingPosition
+            if moveBy == 6 then 
+                player.startingPosition
+            else
+                position
             -- unless you reach the end of standard plane, move
         else if newTranslatedPos <= 39 then
             fromOrigin player.startingPosition newTranslatedPos
