@@ -101,6 +101,7 @@ type Msg
     = Move Int
     | ChangeCounter Counter.Msg
 
+
 update : Msg -> Model -> Model
 update msg model =
     case msg of
@@ -124,7 +125,8 @@ update msg model =
                 }
 
         ChangeCounter msg ->
-            { model | dice = Counter.update msg model.dice} 
+            { model | dice = Counter.update msg model.dice }
+
 
 getPlayerNameForMeeplePosition : Dict String Player -> Int -> String
 getPlayerNameForMeeplePosition players position =
@@ -154,26 +156,38 @@ getToPositionForPlayer player position moveBy =
 
 getNewMeeplePosition : Player -> Int -> Int -> Int
 getNewMeeplePosition player position moveBy =
-    let newTranslatedPos = (toOrigin player.startingPosition position) + moveBy
-
+    let
+        newTranslatedPos =
+            (toOrigin player.startingPosition position) + moveBy
     in
-    -- move from home to starting position
-    if List.member position player.homePositions then
-        player.startingPosition
-    else
-    -- cross over 40
-    if newTranslatedPos > 39 then
-        position
-    else
-        fromOrigin player.startingPosition newTranslatedPos
+        -- dont move when on finish line
+        if List.member position player.finishLine then
+            position
+            -- move from home to starting position
+        else if List.member position player.homePositions then
+            player.startingPosition
+            -- unless you reach the end of standard plane, move
+        else if newTranslatedPos <= 39 then
+            fromOrigin player.startingPosition newTranslatedPos
+        else
+            -- go to finish line
+            (newTranslatedPos - 40) + (firstHomePosition player)
 
-toOrigin: Int -> Int -> Int
+
+toOrigin : Int -> Int -> Int
 toOrigin startingPosition position =
     (position - startingPosition) % 40
 
-fromOrigin: Int -> Int -> Int
+
+fromOrigin : Int -> Int -> Int
 fromOrigin startingPosition translatedPos =
     (translatedPos + startingPosition) % 40
+
+
+firstHomePosition : Player -> Int
+firstHomePosition { finishLine } =
+    (List.head finishLine) |> Maybe.withDefault -100
+
 
 updatePosition : Int -> Int -> Dict String Player -> Dict String Player
 updatePosition from to players =
@@ -188,8 +202,6 @@ updatePosition from to players =
                                     if m == from then
                                         to
                                     else if m == to then
-                                        let fromTo = to
-                                        in
                                         kickMeeple player to
                                     else
                                         m
@@ -222,6 +234,7 @@ view model =
         , svg [ viewBox "0 -5 100 110", Svg.Attributes.width "600px" ] (renderBlock model)
         , Html.map ChangeCounter (Counter.view model.dice)
         ]
+
 
 renderMeeple : Int -> String -> Svg.Svg Msg
 renderMeeple position color =
