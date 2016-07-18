@@ -27,7 +27,7 @@ main =
 type alias Model =
     { selectedPosition : Maybe Int
     , players : Dict String Player
-    , dice : Counter.Model
+    , dice : (Counter.Model, Cmd Counter.Msg)
     }
 
 
@@ -114,7 +114,7 @@ update msg model =
                     model.players |> Dict.get playerName
 
                 toPosition =
-                    getToPositionForPlayer player fromPosition model.dice
+                    getToPositionForPlayer player fromPosition (fst model.dice)
             in
                 { model
                     | players =
@@ -123,7 +123,7 @@ update msg model =
                 }
 
         ChangeCounter msg ->
-            { model | dice = Counter.update msg model.dice }
+            { model | dice = Counter.update msg (fst model.dice) }
 
 
 getPlayerNameForMeeplePosition : Dict String Player -> Int -> String
@@ -235,7 +235,7 @@ view model =
     div []
         [ h1 [] [ Html.text ("(elm) - Clovece, nezlob se") ]
         , svg [ viewBox "0 -5 100 110", Svg.Attributes.width "600px" ] (renderBlock model)
-        , Html.map ChangeCounter (Counter.view model.dice)
+        , Html.map ChangeCounter (Counter.view (fst model.dice))
         ]
 
 
