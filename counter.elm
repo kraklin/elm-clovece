@@ -10,7 +10,7 @@ import Debug
 main : Program Never
 main =
     Html.program
-        { init = (init 1)
+        { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions
@@ -23,9 +23,8 @@ type alias Model =
     Int
 
 
-init : Int -> ( Model, Cmd Msg )
-init count =
-    ( count, Cmd.none )
+init : ( Model, Cmd Msg )
+init = ( 1, Cmd.none )
 
 
 
