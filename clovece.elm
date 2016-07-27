@@ -13,11 +13,16 @@ import Counter exposing (..)
 
 main : Program Never
 main =
-    TimeTravel.beginnerProgram
-        { model = model
-        , view = view
+    TimeTravel.program
+        { init = (init, Cmd.none)
         , update = update
-        }
+        , view = view
+        , subscriptions = subscriptions
+    }
+
+subscriptions : Model -> Sub Msg
+subscriptions model =
+    Sub.none
 
 
 
@@ -27,12 +32,12 @@ main =
 type alias Model =
     { selectedPosition : Maybe Int
     , players : Dict String Player
-    , dice : (Counter.Model, Cmd Counter.Msg)
+    , dice : Counter.Model
     }
 
 
-model : Model
-model =
+init : Model
+init =
     { selectedPosition = Nothing
     , players =
         Dict.fromList
@@ -73,7 +78,7 @@ model =
                 }
               )
             ]
-    , dice = Counter.init 3
+    , dice = Counter.init
     }
 
 
@@ -102,7 +107,7 @@ type Msg
     | ChangeCounter Counter.Msg
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case msg of
         Move fromPosition ->
@@ -114,16 +119,21 @@ update msg model =
                     model.players |> Dict.get playerName
 
                 toPosition =
-                    getToPositionForPlayer player fromPosition (fst model.dice)
+                    getToPositionForPlayer player fromPosition model.dice
             in
-                { model
+                ({ model
                     | players =
                         model.players
                             |> updatePosition fromPosition toPosition
                 }
+                , Cmd.none
+                )
 
         ChangeCounter msg ->
-            { model | dice = Counter.update msg (fst model.dice) }
+            let (counterUpd, counterCmd) =
+                Counter.update msg model.dice
+            in
+            ({ model | dice = counterUpd }, Cmd.map ChangeCounter counterCmd)
 
 
 getPlayerNameForMeeplePosition : Dict String Player -> Int -> String
@@ -235,7 +245,7 @@ view model =
     div []
         [ h1 [] [ Html.text ("(elm) - Clovece, nezlob se") ]
         , svg [ viewBox "0 -5 100 110", Svg.Attributes.width "600px" ] (renderBlock model)
-        , Html.map ChangeCounter (Counter.view (fst model.dice))
+        , Html.map ChangeCounter (Counter.view model.dice)
         ]
 
 

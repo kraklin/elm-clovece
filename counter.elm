@@ -1,4 +1,4 @@
-module Counter exposing (Model, Msg, init, update, view)
+module Counter exposing (..)
 
 import Html exposing (Html, button, div, text, img)
 import Html.App as Html
@@ -7,14 +7,17 @@ import Html.Events exposing (onClick)
 import Random
 import Debug
 
+
 main : Program Never
 main =
     Html.program
-        { init = init
+        { init = ( init, Cmd.none )
         , view = view
         , update = update
         , subscriptions = subscriptions
         }
+
+
 
 -- MODEL
 
@@ -23,8 +26,9 @@ type alias Model =
     Int
 
 
-init : ( Model, Cmd Msg )
-init = ( 1, Cmd.none )
+init : Model
+init =
+    (1)
 
 
 
@@ -54,10 +58,10 @@ update msg model =
                 ( model - 1, Cmd.none )
 
         Roll ->
-            (model, Random.generate NewFace (Random.int 1 6))
+            ( model, Random.generate NewFace (Random.int 1 6) )
 
         NewFace newFace ->
-          ( Debug.log "newFace:" newFace, Cmd.none )
+            ( Debug.log "newFace:" newFace, Cmd.none )
 
 
 
@@ -72,9 +76,11 @@ view model =
         , button [ onClick Increment ] [ text "+" ]
         ]
 
+
+
 -- SUBSCRIPTIONS
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.none
+    Sub.none
