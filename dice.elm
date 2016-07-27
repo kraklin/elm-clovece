@@ -1,4 +1,4 @@
-module Counter exposing (..)
+module Dice exposing (..)
 
 import Html exposing (Html, button, div, text, img)
 import Html.App as Html

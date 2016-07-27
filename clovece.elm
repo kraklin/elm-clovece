@@ -8,7 +8,7 @@ import Html.Events exposing (onClick, onDoubleClick, onMouseOut)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Dict exposing (..)
-import Counter exposing (..)
+import Dice exposing (..)
 
 
 main : Program Never
@@ -32,7 +32,7 @@ subscriptions model =
 type alias Model =
     { selectedPosition : Maybe Int
     , players : Dict String Player
-    , dice : Counter.Model
+    , dice : Dice.Model
     }
 
 
@@ -78,7 +78,7 @@ init =
                 }
               )
             ]
-    , dice = Counter.init
+    , dice = Dice.init
     }
 
 
@@ -104,7 +104,7 @@ type alias Player =
 
 type Msg
     = Move Int
-    | ChangeCounter Counter.Msg
+    | ChangeDice Dice.Msg
 
 
 update : Msg -> Model -> (Model, Cmd Msg)
@@ -129,11 +129,11 @@ update msg model =
                 , Cmd.none
                 )
 
-        ChangeCounter msg ->
-            let (counterUpd, counterCmd) =
-                Counter.update msg model.dice
+        ChangeDice msg ->
+            let (diceUpd, diceCmd) =
+                Dice.update msg model.dice
             in
-            ({ model | dice = counterUpd }, Cmd.map ChangeCounter counterCmd)
+            ({ model | dice = diceUpd }, Cmd.map ChangeDice diceCmd)
 
 
 getPlayerNameForMeeplePosition : Dict String Player -> Int -> String
@@ -245,7 +245,7 @@ view model =
     div []
         [ h1 [] [ Html.text ("(elm) - Clovece, nezlob se") ]
         , svg [ viewBox "0 -5 100 110", Svg.Attributes.width "600px" ] (renderBlock model)
-        , Html.map ChangeCounter (Counter.view model.dice)
+        , Html.map ChangeDice (Dice.view model.dice)
         ]
 
 
