@@ -14,15 +14,16 @@ import Dice exposing (..)
 main : Program Never
 main =
     TimeTravel.program
-        { init = (init, Cmd.none)
+        { init = ( init, Cmd.none )
         , update = update
         , view = view
         , subscriptions = subscriptions
-    }
+        }
+
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    Sub.map ChangeDice (Dice.subscriptions model.dice)
 
 
 
@@ -104,14 +105,16 @@ type alias Player =
 
 type Msg
     = Move Int
-    | ChangeDice Dice.Msg
+    --|
+     | ChangeDice Dice.Msg
 
 
-update : Msg -> Model -> (Model, Cmd Msg)
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Move fromPosition ->
             let
+                value = Maybe.withDefault 0 model.dice.value
                 playerName =
                     getPlayerNameForMeeplePosition model.players fromPosition
 
@@ -119,21 +122,22 @@ update msg model =
                     model.players |> Dict.get playerName
 
                 toPosition =
-                    getToPositionForPlayer player fromPosition model.dice
+                    getToPositionForPlayer player fromPosition value
             in
-                ({ model
+                ( { model
                     | players =
                         model.players
                             |> updatePosition fromPosition toPosition
-                }
+                  }
                 , Cmd.none
                 )
 
         ChangeDice msg ->
-            let (diceUpd, diceCmd) =
-                Dice.update msg model.dice
+            let
+                ( diceUpd, diceCmd ) =
+                    Dice.update msg model.dice
             in
-            ({ model | dice = diceUpd }, Cmd.map ChangeDice diceCmd)
+                ( { model | dice = diceUpd }, Cmd.map ChangeDice diceCmd )
 
 
 getPlayerNameForMeeplePosition : Dict String Player -> Int -> String
@@ -180,7 +184,7 @@ getNewMeeplePosition player position moveBy =
             -- unless you reach the end of standard plane, move
         else if newTranslatedPos <= 39 then
             fromOrigin player.startingPosition newTranslatedPos
-        else if newTranslatedPos |> inInterval (40,43) then
+        else if newTranslatedPos |> inInterval ( 40, 43 ) then
             -- go to finish line
             (newTranslatedPos - 40) + (firstHomePosition player)
         else
