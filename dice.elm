@@ -1,8 +1,8 @@
 module Dice exposing (Model, Msg, init, update, view, subscriptions)
 
-import Html exposing (Html, button, div, text, img)
+import Html exposing (Html, button, div, text, img, p)
 import Html.App as Html
-import Html.Attributes exposing (src)
+import Html.Attributes exposing (src, height)
 import Html.Events exposing (onClick)
 import Random
 import Time exposing (Time, second)
@@ -23,19 +23,21 @@ main =
 
 
 type alias Model =
-    { value : Int
+    { value : Maybe Int
     , isRolling : Bool
     , rollingTime : Time
+    , history : List (Maybe Int)
     }
 
 
 init : Model
 init =
-    { value = 1
+    { value = Nothing
     , isRolling = False
     , rollingTime = 10
+    , history = []
     }
- 
+
 
 
 -- UPDATE
@@ -53,25 +55,35 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Increment ->
-            if model.value == 6 then
-                ( { model | value = 6 }, Cmd.none )
-            else
-                ( { model | value = model.value + 1 }, Cmd.none )
+            let
+                value = Maybe.withDefault 0 model.value
+            in
+                if value == 6 then
+                    ( { model | value = Just 6 }, Cmd.none )
+                else
+                    ( { model | value = Just (value + 1) }, Cmd.none )
 
         Decrement ->
-            if model.value == 1 then
-                ( { model | value = 1 }, Cmd.none )
+            let
+                value = Maybe.withDefault 0 model.value
+            in
+            if value <= 1 then
+                ( { model | value = Just 1 }, Cmd.none )
             else
-                ( { model | value = model.value - 1 }, Cmd.none )
-
+                ( { model | value = Just (value - 1) }, Cmd.none )
         Roll ->
-            ( { model | isRolling = not model.isRolling }, Cmd.none )
+            if model.isRolling then
+                ( model, Cmd.none )
+            else
+                ( { model | isRolling = not model.isRolling }, Cmd.none )
 
         GenerateNewFace time ->
             if (model.rollingTime >= 600) then
                 ( { model
                     | isRolling = False
                     , rollingTime = 10
+                    , history = model.value :: model.history
+                    , value = Nothing
                   }
                 , Cmd.none
                 )
@@ -83,7 +95,7 @@ update msg model =
                 )
 
         NewFace newFace ->
-            ( { model | value = newFace }, Cmd.none )
+            ( { model | value = Just newFace }, Cmd.none )
 
 
 
@@ -93,10 +105,27 @@ update msg model =
 view : Model -> Html Msg
 view model =
     div []
-        [ button [ onClick Decrement ] [ text "-" ]
-        , img [ src ("img/" ++ toString model.value ++ ".png"), onClick Roll ] []
-        , button [ onClick Increment ] [ text "+" ]
-        ]
+        (List.concat
+            [ [ button [ onClick Decrement ] [ text "-" ]
+                ,img [ src (diceImagePath model.value), onClick Roll ] []
+                , button [ onClick Increment ] [ text "+" ]
+              ]
+            , model.history
+                |> List.map
+                    (\a ->
+                        img [ src (diceImagePath a), height 50 ] []
+                    )
+            ]
+        )
+
+
+diceImagePath value =
+    case value of
+        Just val ->
+            "img/" ++ toString val ++ ".png"
+
+        Nothing ->
+            "img/roll.png"
 
 
 
