@@ -15,7 +15,9 @@ main =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    Sub.batch [
+    Sub.map ChangeDice (Dice.subscriptions model.dice)
+    ]
 
 type alias Model = {dice : Dice.Model}
 
