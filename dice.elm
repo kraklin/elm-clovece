@@ -1,14 +1,13 @@
 module Dice exposing (..)
 
 import Html exposing (Html, button, div, text, img)
-import Html.App as Html
 import Html.Attributes exposing (src)
 import Html.Events exposing (onClick)
 import Random
 import Debug
 
 
-main : Program Never
+main : Program Never Model Msg
 main =
     Html.program
         { init = ( init, Cmd.none )

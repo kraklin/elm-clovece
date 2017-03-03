@@ -1,9 +1,6 @@
 module Main exposing (..)
 
 import Html exposing (Html, div, button, text, h1, img)
-import Html.Attributes exposing (..)
-import Html.App as Html
-import TimeTravel.Html.App as TimeTravel
 import Html.Events exposing (onClick, onDoubleClick, onMouseOut)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
@@ -11,14 +8,15 @@ import Dict exposing (..)
 import Dice exposing (..)
 
 
-main : Program Never
+main : Program Never Model Msg
 main =
-    TimeTravel.program
-        { init = (init, Cmd.none)
+    Html.program
+        { init = ( init, Cmd.none )
         , update = update
         , view = view
         , subscriptions = subscriptions
-    }
+        }
+
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
@@ -45,8 +43,8 @@ init =
               , { name = "Red"
                 , color = "#f9004e"
                 , startingPosition = 0
-                , finishLine = [40..43]
-                , homePositions = [56..59]
+                , finishLine = (List.range 40 43)
+                , homePositions = (List.range 56 59)
                 , meeplesPositions = [ 14, 57, 2, 59 ]
                 }
               )
@@ -54,27 +52,27 @@ init =
               , { name = "Green"
                 , color = "#b9d221"
                 , startingPosition = 10
-                , finishLine = [44..47]
-                , homePositions = [60..63]
-                , meeplesPositions = [60..63]
+                , finishLine = (List.range 44 47)
+                , homePositions = (List.range 60 63)
+                , meeplesPositions = (List.range 60 63)
                 }
               )
             , ( "Blue"
               , { name = "Blue"
                 , color = "#2196d2"
                 , startingPosition = 20
-                , finishLine = [48..51]
-                , homePositions = [68..71]
-                , meeplesPositions = [68..71]
+                , finishLine = (List.range 48 51)
+                , homePositions = (List.range 68 71)
+                , meeplesPositions = (List.range 68 71)
                 }
               )
             , ( "Yellow"
               , { name = "Yellow"
                 , color = "#ffc300"
                 , startingPosition = 30
-                , finishLine = [52..55]
-                , homePositions = [64..67]
-                , meeplesPositions = [64..67]
+                , finishLine = (List.range 52 55)
+                , homePositions = (List.range 64 67)
+                , meeplesPositions = (List.range 64 67)
                 }
               )
             ]
@@ -107,7 +105,7 @@ type Msg
     | ChangeDice Dice.Msg
 
 
-update : Msg -> Model -> (Model, Cmd Msg)
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Move fromPosition ->
@@ -121,19 +119,20 @@ update msg model =
                 toPosition =
                     getToPositionForPlayer player fromPosition model.dice
             in
-                ({ model
+                ( { model
                     | players =
                         model.players
                             |> updatePosition fromPosition toPosition
-                }
+                  }
                 , Cmd.none
                 )
 
         ChangeDice msg ->
-            let (diceUpd, diceCmd) =
-                Dice.update msg model.dice
+            let
+                ( diceUpd, diceCmd ) =
+                    Dice.update msg model.dice
             in
-            ({ model | dice = diceUpd }, Cmd.map ChangeDice diceCmd)
+                ( { model | dice = diceUpd }, Cmd.map ChangeDice diceCmd )
 
 
 getPlayerNameForMeeplePosition : Dict String Player -> Int -> String
@@ -180,7 +179,7 @@ getNewMeeplePosition player position moveBy =
             -- unless you reach the end of standard plane, move
         else if newTranslatedPos <= 39 then
             fromOrigin player.startingPosition newTranslatedPos
-        else if newTranslatedPos |> inInterval (40,43) then
+        else if newTranslatedPos |> inInterval ( 40, 43 ) then
             -- go to finish line
             (newTranslatedPos - 40) + (firstHomePosition player)
         else
@@ -283,7 +282,7 @@ renderCircle position color =
         coords =
             getCoordsForPosition position
 
-        strokeParams =
+        ( strokeCol, strokeWdth ) =
             if color == "#ffffff" then
                 ( "#000000", "0.1" )
             else
@@ -293,10 +292,10 @@ renderCircle position color =
             [ coords.x |> toString |> cx
             , coords.y |> toString |> cy
             , r "4"
-            , stroke (fst strokeParams)
+            , stroke strokeCol
             , fill color
             , fillOpacity "0.2"
-            , strokeWidth (snd strokeParams)
+            , strokeWidth strokeWdth
             ]
             []
 
@@ -336,22 +335,15 @@ getCoordsForPosition position =
         offset =
             4.3
 
-        xy =
+        ( xCoord, yCoord ) =
             getXYForPosition position
     in
-        { x = size * toFloat (fst xy) + offset, y = size * toFloat (snd xy) + offset }
+        { x = size * toFloat xCoord + offset, y = size * toFloat yCoord + offset }
 
 
 inInterval : ( Int, Int ) -> Int -> Bool
-inInterval interval toCheck =
-    let
-        lower =
-            fst interval
-
-        higher =
-            snd interval
-    in
-        toCheck >= lower && toCheck <= higher
+inInterval ( lower, higher ) toCheck =
+    toCheck >= lower && toCheck <= higher
 
 
 getXYForPosition : Int -> ( Int, Int )
@@ -409,13 +401,14 @@ getXYForPosition position =
 
 renderText : Point -> String -> Svg.Svg Msg
 renderText point innerText =
-    Svg.text' [ x (toString (point.x - 3)), y (toString (point.y - 3.5)), fontSize "2" ] [ Svg.text innerText ]
+    -- Svg.text [ x (toString (point.x - 3)), y (toString (point.y - 3.5)), fontSize "2" ] [ Svg.text innerText ]
+    Svg.text innerText
 
 
 renderBlock : Model -> List (Svg.Svg Msg)
 renderBlock model =
     List.concat
-        [ List.map (\position -> (renderCircle position (getColorForPosition (Dict.values model.players) position))) [0..71]
-        , List.map (\position -> renderText (getCoordsForPosition position) (toString position)) [0..71]
-        , List.concatMap (\p -> renderMeeplesForPlayer p) (Dict.values model.players)
+        [ List.map (\position -> (renderCircle position (getColorForPosition (Dict.values model.players) position))) (List.range 0 71)
+        , List.map (\position -> renderText (getCoordsForPosition position) (toString position)) (List.range 0 71)
+        , (Dict.values model.players |> List.concatMap (\p -> renderMeeplesForPlayer p))
         ]
