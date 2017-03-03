@@ -71,7 +71,7 @@ view : Model -> Html Msg
 view model =
     div []
         [ button [ onClick Decrement ] [ text "-" ]
-        , img [ src ("img/" ++ toString model ++ ".png"), onClick Roll ] []
+        , img [ src ("../img/" ++ toString model ++ ".png"), onClick Roll ] []
         , button [ onClick Increment ] [ text "+" ]
         ]
 
