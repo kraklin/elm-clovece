@@ -9357,6 +9357,11 @@ var _elm_lang$svg$Svg_Attributes$additive = _elm_lang$virtual_dom$VirtualDom$att
 var _elm_lang$svg$Svg_Attributes$accumulate = _elm_lang$virtual_dom$VirtualDom$attribute('accumulate');
 var _elm_lang$svg$Svg_Attributes$accelerate = _elm_lang$virtual_dom$VirtualDom$attribute('accelerate');
 var _elm_lang$svg$Svg_Attributes$accentHeight = _elm_lang$virtual_dom$VirtualDom$attribute('accent-height');
+var _user$project$Clovece_Helpers$inInterval = F2(
+	function (_p0, toCheck) {
+		var _p1 = _p0;
+		return (_elm_lang$core$Native_Utils.cmp(toCheck, _p1._0) > -1) && (_elm_lang$core$Native_Utils.cmp(toCheck, _p1._1) < 1);
+	});
 var _user$project$Dice$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
@@ -9457,247 +9462,7 @@ var _user$project$Dice$main = _elm_lang$html$Html$program(
 		update: _user$project$Dice$update,
 		subscriptions: _user$project$Dice$subscriptions
 	})();
-var _user$project$Main$renderText = F2(
-	function (point, innerText) {
-		return _elm_lang$svg$Svg$text(innerText);
-	});
-var _user$project$Main$inInterval = F2(
-	function (_p0, toCheck) {
-		var _p1 = _p0;
-		return (_elm_lang$core$Native_Utils.cmp(toCheck, _p1._0) > -1) && (_elm_lang$core$Native_Utils.cmp(toCheck, _p1._1) < 1);
-	});
-var _user$project$Main$getXYForPosition = function (position) {
-	return A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 0, _1: 3},
-		position) ? {ctor: '_Tuple2', _0: position, _1: 4} : (A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 4, _1: 8},
-		position) ? {ctor: '_Tuple2', _0: 4, _1: 4 - (position - 4)} : (_elm_lang$core$Native_Utils.eq(position, 9) ? {ctor: '_Tuple2', _0: 5, _1: 0} : (A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 10, _1: 14},
-		position) ? {ctor: '_Tuple2', _0: 6, _1: position - 10} : (A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 15, _1: 18},
-		position) ? {ctor: '_Tuple2', _0: position - 8, _1: 4} : (_elm_lang$core$Native_Utils.eq(position, 19) ? {ctor: '_Tuple2', _0: 10, _1: 5} : (A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 20, _1: 24},
-		position) ? {ctor: '_Tuple2', _0: 10 - (position - 20), _1: 6} : (A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 25, _1: 28},
-		position) ? {ctor: '_Tuple2', _0: 6, _1: (7 + position) - 25} : (_elm_lang$core$Native_Utils.eq(position, 29) ? {ctor: '_Tuple2', _0: 5, _1: 10} : (A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 30, _1: 34},
-		position) ? {ctor: '_Tuple2', _0: 4, _1: 10 - (position - 30)} : (A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 35, _1: 38},
-		position) ? {ctor: '_Tuple2', _0: 3 - (position - 35), _1: 6} : (_elm_lang$core$Native_Utils.eq(position, 39) ? {ctor: '_Tuple2', _0: 0, _1: 5} : (A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 40, _1: 43},
-		position) ? {ctor: '_Tuple2', _0: 1 + (position - 40), _1: 5} : (A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 44, _1: 47},
-		position) ? {ctor: '_Tuple2', _0: 5, _1: 1 + (position - 44)} : (A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 48, _1: 51},
-		position) ? {ctor: '_Tuple2', _0: 9 - (position - 48), _1: 5} : (A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 52, _1: 55},
-		position) ? {ctor: '_Tuple2', _0: 5, _1: 9 - (position - 52)} : (A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 56, _1: 59},
-		position) ? {
-		ctor: '_Tuple2',
-		_0: A2(_elm_lang$core$Basics_ops['%'], position - 56, 2),
-		_1: ((position - 56) / 2) | 0
-	} : (A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 60, _1: 63},
-		position) ? {
-		ctor: '_Tuple2',
-		_0: 9 + A2(_elm_lang$core$Basics_ops['%'], position - 60, 2),
-		_1: ((position - 60) / 2) | 0
-	} : (A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 64, _1: 67},
-		position) ? {
-		ctor: '_Tuple2',
-		_0: A2(_elm_lang$core$Basics_ops['%'], position - 64, 2),
-		_1: 9 + (((position - 64) / 2) | 0)
-	} : (A2(
-		_user$project$Main$inInterval,
-		{ctor: '_Tuple2', _0: 68, _1: 71},
-		position) ? {
-		ctor: '_Tuple2',
-		_0: 9 + A2(_elm_lang$core$Basics_ops['%'], position - 68, 2),
-		_1: 9 + (((position - 68) / 2) | 0)
-	} : {ctor: '_Tuple2', _0: -100, _1: -100})))))))))))))))))));
-};
-var _user$project$Main$getCoordsForPosition = function (position) {
-	var _p2 = _user$project$Main$getXYForPosition(position);
-	var xCoord = _p2._0;
-	var yCoord = _p2._1;
-	var offset = 4.3;
-	var size = 100 / 11;
-	return {
-		x: (size * _elm_lang$core$Basics$toFloat(xCoord)) + offset,
-		y: (size * _elm_lang$core$Basics$toFloat(yCoord)) + offset
-	};
-};
-var _user$project$Main$allPlayerPositions = function (player) {
-	return {
-		ctor: '::',
-		_0: player.startingPosition,
-		_1: A2(_elm_lang$core$Basics_ops['++'], player.finishLine, player.homePositions)
-	};
-};
-var _user$project$Main$getColorForPosition = F2(
-	function (players, position) {
-		var playerOnPosition = _elm_lang$core$List$head(
-			A2(
-				_elm_lang$core$List$filter,
-				function (player) {
-					return A2(
-						_elm_lang$core$List$member,
-						position,
-						_user$project$Main$allPlayerPositions(player));
-				},
-				players));
-		var _p3 = playerOnPosition;
-		if (_p3.ctor === 'Just') {
-			return _p3._0.color;
-		} else {
-			return '#ffffff';
-		}
-	});
-var _user$project$Main$renderCircle = F2(
-	function (position, color) {
-		var _p4 = _elm_lang$core$Native_Utils.eq(color, '#ffffff') ? {ctor: '_Tuple2', _0: '#000000', _1: '0.1'} : {ctor: '_Tuple2', _0: color, _1: '0.5'};
-		var strokeCol = _p4._0;
-		var strokeWdth = _p4._1;
-		var coords = _user$project$Main$getCoordsForPosition(position);
-		return A2(
-			_elm_lang$svg$Svg$circle,
-			{
-				ctor: '::',
-				_0: _elm_lang$svg$Svg_Attributes$cx(
-					_elm_lang$core$Basics$toString(coords.x)),
-				_1: {
-					ctor: '::',
-					_0: _elm_lang$svg$Svg_Attributes$cy(
-						_elm_lang$core$Basics$toString(coords.y)),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$svg$Svg_Attributes$r('4'),
-						_1: {
-							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$stroke(strokeCol),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$fill(color),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$svg$Svg_Attributes$fillOpacity('0.2'),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$svg$Svg_Attributes$strokeWidth(strokeWdth),
-										_1: {ctor: '[]'}
-									}
-								}
-							}
-						}
-					}
-				}
-			},
-			{ctor: '[]'});
-	});
-var _user$project$Main$kickMeeple = F2(
-	function (player, position) {
-		if (A2(_elm_lang$core$List$member, position, player.homePositions)) {
-			return position;
-		} else {
-			var _p5 = _elm_lang$core$List$head(
-				A2(
-					_elm_lang$core$List$filter,
-					function (home) {
-						return !A2(_elm_lang$core$List$member, home, player.meeplesPositions);
-					},
-					player.homePositions));
-			if (_p5.ctor === 'Just') {
-				return _p5._0;
-			} else {
-				return position;
-			}
-		}
-	});
-var _user$project$Main$updatePosition = F3(
-	function (from, to, players) {
-		return A2(
-			_elm_lang$core$Dict$map,
-			F2(
-				function (name, player) {
-					return _elm_lang$core$Native_Utils.update(
-						player,
-						{
-							meeplesPositions: A2(
-								_elm_lang$core$List$map,
-								function (m) {
-									return _elm_lang$core$Native_Utils.eq(m, from) ? to : (_elm_lang$core$Native_Utils.eq(m, to) ? A2(_user$project$Main$kickMeeple, player, to) : m);
-								},
-								player.meeplesPositions)
-						});
-				}),
-			players);
-	});
-var _user$project$Main$firstHomePosition = function (_p6) {
-	var _p7 = _p6;
-	return A2(
-		_elm_lang$core$Maybe$withDefault,
-		-100,
-		_elm_lang$core$List$head(_p7.finishLine));
-};
-var _user$project$Main$fromOrigin = F2(
-	function (startingPosition, translatedPos) {
-		return A2(_elm_lang$core$Basics_ops['%'], translatedPos + startingPosition, 40);
-	});
-var _user$project$Main$toOrigin = F2(
-	function (startingPosition, position) {
-		return A2(_elm_lang$core$Basics_ops['%'], position - startingPosition, 40);
-	});
-var _user$project$Main$getNewMeeplePosition = F3(
-	function (player, position, moveBy) {
-		var newTranslatedPos = A2(_user$project$Main$toOrigin, player.startingPosition, position) + moveBy;
-		return A2(_elm_lang$core$List$member, position, player.finishLine) ? position : (A2(_elm_lang$core$List$member, position, player.homePositions) ? (_elm_lang$core$Native_Utils.eq(moveBy, 6) ? player.startingPosition : position) : ((_elm_lang$core$Native_Utils.cmp(newTranslatedPos, 39) < 1) ? A2(_user$project$Main$fromOrigin, player.startingPosition, newTranslatedPos) : (A2(
-			_user$project$Main$inInterval,
-			{ctor: '_Tuple2', _0: 40, _1: 43},
-			newTranslatedPos) ? ((newTranslatedPos - 40) + _user$project$Main$firstHomePosition(player)) : position)));
-	});
-var _user$project$Main$getToPositionForPlayer = F3(
-	function (player, position, moveBy) {
-		var _p8 = player;
-		if (_p8.ctor === 'Just') {
-			return A3(_user$project$Main$getNewMeeplePosition, _p8._0, position, moveBy);
-		} else {
-			return position;
-		}
-	});
-var _user$project$Main$getPlayerNameForMeeplePosition = F2(
-	function (players, position) {
-		var filteredPlayer = _elm_lang$core$List$head(
-			A2(
-				_elm_lang$core$List$filter,
-				function (p) {
-					return A2(_elm_lang$core$List$member, position, p.meeplesPositions);
-				},
-				_elm_lang$core$Dict$values(players)));
-		var _p9 = filteredPlayer;
-		if (_p9.ctor === 'Just') {
-			return _p9._0.name;
-		} else {
-			return '';
-		}
-	});
-var _user$project$Main$init = {
+var _user$project$Clovece_Model$init = {
 	selectedPosition: _elm_lang$core$Maybe$Nothing,
 	players: _elm_lang$core$Dict$fromList(
 		{
@@ -9779,60 +9544,266 @@ var _user$project$Main$init = {
 		}),
 	dice: _user$project$Dice$init
 };
-var _user$project$Main$subscriptions = function (model) {
-	return _elm_lang$core$Platform_Sub$none;
-};
-var _user$project$Main$Model = F3(
+var _user$project$Clovece_Model$Model = F3(
 	function (a, b, c) {
 		return {selectedPosition: a, players: b, dice: c};
 	});
-var _user$project$Main$Point = F2(
+var _user$project$Clovece_Model$Point = F2(
 	function (a, b) {
 		return {x: a, y: b};
 	});
-var _user$project$Main$Player = F6(
+var _user$project$Clovece_Model$Player = F6(
 	function (a, b, c, d, e, f) {
 		return {name: a, color: b, startingPosition: c, finishLine: d, homePositions: e, meeplesPositions: f};
 	});
-var _user$project$Main$ChangeDice = function (a) {
+var _user$project$Clovece_Update$kickMeeple = F2(
+	function (player, position) {
+		if (A2(_elm_lang$core$List$member, position, player.homePositions)) {
+			return position;
+		} else {
+			var _p0 = _elm_lang$core$List$head(
+				A2(
+					_elm_lang$core$List$filter,
+					function (home) {
+						return !A2(_elm_lang$core$List$member, home, player.meeplesPositions);
+					},
+					player.homePositions));
+			if (_p0.ctor === 'Just') {
+				return _p0._0;
+			} else {
+				return position;
+			}
+		}
+	});
+var _user$project$Clovece_Update$updatePosition = F3(
+	function (from, to, players) {
+		return A2(
+			_elm_lang$core$Dict$map,
+			F2(
+				function (name, player) {
+					return _elm_lang$core$Native_Utils.update(
+						player,
+						{
+							meeplesPositions: A2(
+								_elm_lang$core$List$map,
+								function (m) {
+									return _elm_lang$core$Native_Utils.eq(m, from) ? to : (_elm_lang$core$Native_Utils.eq(m, to) ? A2(_user$project$Clovece_Update$kickMeeple, player, to) : m);
+								},
+								player.meeplesPositions)
+						});
+				}),
+			players);
+	});
+var _user$project$Clovece_Update$firstHomePosition = function (_p1) {
+	var _p2 = _p1;
+	return A2(
+		_elm_lang$core$Maybe$withDefault,
+		-100,
+		_elm_lang$core$List$head(_p2.finishLine));
+};
+var _user$project$Clovece_Update$fromOrigin = F2(
+	function (startingPosition, translatedPos) {
+		return A2(_elm_lang$core$Basics_ops['%'], translatedPos + startingPosition, 40);
+	});
+var _user$project$Clovece_Update$toOrigin = F2(
+	function (startingPosition, position) {
+		return A2(_elm_lang$core$Basics_ops['%'], position - startingPosition, 40);
+	});
+var _user$project$Clovece_Update$getNewMeeplePosition = F3(
+	function (player, position, moveBy) {
+		var newTranslatedPos = A2(_user$project$Clovece_Update$toOrigin, player.startingPosition, position) + moveBy;
+		return A2(_elm_lang$core$List$member, position, player.finishLine) ? position : (A2(_elm_lang$core$List$member, position, player.homePositions) ? (_elm_lang$core$Native_Utils.eq(moveBy, 6) ? player.startingPosition : position) : ((_elm_lang$core$Native_Utils.cmp(newTranslatedPos, 39) < 1) ? A2(_user$project$Clovece_Update$fromOrigin, player.startingPosition, newTranslatedPos) : (A2(
+			_user$project$Clovece_Helpers$inInterval,
+			{ctor: '_Tuple2', _0: 40, _1: 43},
+			newTranslatedPos) ? ((newTranslatedPos - 40) + _user$project$Clovece_Update$firstHomePosition(player)) : position)));
+	});
+var _user$project$Clovece_Update$ChangeDice = function (a) {
 	return {ctor: 'ChangeDice', _0: a};
 };
-var _user$project$Main$update = F2(
+var _user$project$Clovece_Update$update = F2(
 	function (msg, model) {
-		var _p10 = msg;
-		if (_p10.ctor === 'Move') {
-			var _p11 = _p10._0;
-			var playerName = A2(_user$project$Main$getPlayerNameForMeeplePosition, model.players, _p11);
-			var player = A2(_elm_lang$core$Dict$get, playerName, model.players);
-			var toPosition = A3(_user$project$Main$getToPositionForPlayer, player, _p11, model.dice);
+		var _p3 = msg;
+		if (_p3.ctor === 'Move') {
+			var _p4 = _p3._0;
+			var toPosition = A3(_user$project$Clovece_Update$getNewMeeplePosition, _p3._1, _p4, model.dice);
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
 					model,
 					{
-						players: A3(_user$project$Main$updatePosition, _p11, toPosition, model.players)
+						players: A3(_user$project$Clovece_Update$updatePosition, _p4, toPosition, model.players)
 					}),
 				_1: _elm_lang$core$Platform_Cmd$none
 			};
 		} else {
-			var _p12 = A2(_user$project$Dice$update, _p10._0, model.dice);
-			var diceUpd = _p12._0;
-			var diceCmd = _p12._1;
+			var _p5 = A2(_user$project$Dice$update, _p3._0, model.dice);
+			var diceUpd = _p5._0;
+			var diceCmd = _p5._1;
 			return {
 				ctor: '_Tuple2',
 				_0: _elm_lang$core$Native_Utils.update(
 					model,
 					{dice: diceUpd}),
-				_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$Main$ChangeDice, diceCmd)
+				_1: A2(_elm_lang$core$Platform_Cmd$map, _user$project$Clovece_Update$ChangeDice, diceCmd)
 			};
 		}
 	});
-var _user$project$Main$Move = function (a) {
-	return {ctor: 'Move', _0: a};
+var _user$project$Clovece_Update$Move = F2(
+	function (a, b) {
+		return {ctor: 'Move', _0: a, _1: b};
+	});
+var _user$project$Clovece_View$renderText = F2(
+	function (point, innerText) {
+		return _elm_lang$svg$Svg$text(innerText);
+	});
+var _user$project$Clovece_View$getXYForPosition = function (position) {
+	return A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 0, _1: 3},
+		position) ? {ctor: '_Tuple2', _0: position, _1: 4} : (A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 4, _1: 8},
+		position) ? {ctor: '_Tuple2', _0: 4, _1: 4 - (position - 4)} : (_elm_lang$core$Native_Utils.eq(position, 9) ? {ctor: '_Tuple2', _0: 5, _1: 0} : (A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 10, _1: 14},
+		position) ? {ctor: '_Tuple2', _0: 6, _1: position - 10} : (A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 15, _1: 18},
+		position) ? {ctor: '_Tuple2', _0: position - 8, _1: 4} : (_elm_lang$core$Native_Utils.eq(position, 19) ? {ctor: '_Tuple2', _0: 10, _1: 5} : (A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 20, _1: 24},
+		position) ? {ctor: '_Tuple2', _0: 10 - (position - 20), _1: 6} : (A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 25, _1: 28},
+		position) ? {ctor: '_Tuple2', _0: 6, _1: (7 + position) - 25} : (_elm_lang$core$Native_Utils.eq(position, 29) ? {ctor: '_Tuple2', _0: 5, _1: 10} : (A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 30, _1: 34},
+		position) ? {ctor: '_Tuple2', _0: 4, _1: 10 - (position - 30)} : (A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 35, _1: 38},
+		position) ? {ctor: '_Tuple2', _0: 3 - (position - 35), _1: 6} : (_elm_lang$core$Native_Utils.eq(position, 39) ? {ctor: '_Tuple2', _0: 0, _1: 5} : (A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 40, _1: 43},
+		position) ? {ctor: '_Tuple2', _0: 1 + (position - 40), _1: 5} : (A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 44, _1: 47},
+		position) ? {ctor: '_Tuple2', _0: 5, _1: 1 + (position - 44)} : (A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 48, _1: 51},
+		position) ? {ctor: '_Tuple2', _0: 9 - (position - 48), _1: 5} : (A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 52, _1: 55},
+		position) ? {ctor: '_Tuple2', _0: 5, _1: 9 - (position - 52)} : (A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 56, _1: 59},
+		position) ? {
+		ctor: '_Tuple2',
+		_0: A2(_elm_lang$core$Basics_ops['%'], position - 56, 2),
+		_1: ((position - 56) / 2) | 0
+	} : (A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 60, _1: 63},
+		position) ? {
+		ctor: '_Tuple2',
+		_0: 9 + A2(_elm_lang$core$Basics_ops['%'], position - 60, 2),
+		_1: ((position - 60) / 2) | 0
+	} : (A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 64, _1: 67},
+		position) ? {
+		ctor: '_Tuple2',
+		_0: A2(_elm_lang$core$Basics_ops['%'], position - 64, 2),
+		_1: 9 + (((position - 64) / 2) | 0)
+	} : (A2(
+		_user$project$Clovece_Helpers$inInterval,
+		{ctor: '_Tuple2', _0: 68, _1: 71},
+		position) ? {
+		ctor: '_Tuple2',
+		_0: 9 + A2(_elm_lang$core$Basics_ops['%'], position - 68, 2),
+		_1: 9 + (((position - 68) / 2) | 0)
+	} : {ctor: '_Tuple2', _0: -100, _1: -100})))))))))))))))))));
 };
-var _user$project$Main$renderMeeple = F2(
+var _user$project$Clovece_View$getCoordsForPosition = function (position) {
+	var _p0 = _user$project$Clovece_View$getXYForPosition(position);
+	var xCoord = _p0._0;
+	var yCoord = _p0._1;
+	var offset = 4.3;
+	var size = 100 / 11;
+	return {
+		x: (size * _elm_lang$core$Basics$toFloat(xCoord)) + offset,
+		y: (size * _elm_lang$core$Basics$toFloat(yCoord)) + offset
+	};
+};
+var _user$project$Clovece_View$allPlayerPositions = function (player) {
+	return {
+		ctor: '::',
+		_0: player.startingPosition,
+		_1: A2(_elm_lang$core$Basics_ops['++'], player.finishLine, player.homePositions)
+	};
+};
+var _user$project$Clovece_View$getColorForPosition = F2(
+	function (players, position) {
+		var playerOnPosition = _elm_lang$core$List$head(
+			A2(
+				_elm_lang$core$List$filter,
+				function (player) {
+					return A2(
+						_elm_lang$core$List$member,
+						position,
+						_user$project$Clovece_View$allPlayerPositions(player));
+				},
+				players));
+		var _p1 = playerOnPosition;
+		if (_p1.ctor === 'Just') {
+			return _p1._0.color;
+		} else {
+			return '#ffffff';
+		}
+	});
+var _user$project$Clovece_View$renderCircle = F2(
 	function (position, color) {
-		var coords = _user$project$Main$getCoordsForPosition(position);
+		var _p2 = _elm_lang$core$Native_Utils.eq(color, '#ffffff') ? {ctor: '_Tuple2', _0: '#000000', _1: '0.1'} : {ctor: '_Tuple2', _0: color, _1: '0.5'};
+		var strokeCol = _p2._0;
+		var strokeWdth = _p2._1;
+		var coords = _user$project$Clovece_View$getCoordsForPosition(position);
+		return A2(
+			_elm_lang$svg$Svg$circle,
+			{
+				ctor: '::',
+				_0: _elm_lang$svg$Svg_Attributes$cx(
+					_elm_lang$core$Basics$toString(coords.x)),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$svg$Svg_Attributes$cy(
+						_elm_lang$core$Basics$toString(coords.y)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$svg$Svg_Attributes$r('4'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$svg$Svg_Attributes$stroke(strokeCol),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$svg$Svg_Attributes$fill(color),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$svg$Svg_Attributes$fillOpacity('0.2'),
+									_1: {
+										ctor: '::',
+										_0: _elm_lang$svg$Svg_Attributes$strokeWidth(strokeWdth),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}
+			},
+			{ctor: '[]'});
+	});
+var _user$project$Clovece_View$renderMeeple = F2(
+	function (position, player) {
+		var coords = _user$project$Clovece_View$getCoordsForPosition(position);
 		return A2(
 			_elm_lang$svg$Svg$circle,
 			{
@@ -9848,10 +9819,10 @@ var _user$project$Main$renderMeeple = F2(
 						_0: _elm_lang$svg$Svg_Attributes$r('2'),
 						_1: {
 							ctor: '::',
-							_0: _elm_lang$svg$Svg_Attributes$stroke(color),
+							_0: _elm_lang$svg$Svg_Attributes$stroke(player.color),
 							_1: {
 								ctor: '::',
-								_0: _elm_lang$svg$Svg_Attributes$fill(color),
+								_0: _elm_lang$svg$Svg_Attributes$fill(player.color),
 								_1: {
 									ctor: '::',
 									_0: _elm_lang$svg$Svg_Attributes$fillOpacity('0.7'),
@@ -9861,7 +9832,7 @@ var _user$project$Main$renderMeeple = F2(
 										_1: {
 											ctor: '::',
 											_0: _elm_lang$html$Html_Events$onClick(
-												_user$project$Main$Move(position)),
+												A2(_user$project$Clovece_Update$Move, position, player)),
 											_1: {ctor: '[]'}
 										}
 									}
@@ -9873,16 +9844,15 @@ var _user$project$Main$renderMeeple = F2(
 			},
 			{ctor: '[]'});
 	});
-var _user$project$Main$renderMeeplesForPlayer = function (player) {
-	var color = player.color;
+var _user$project$Clovece_View$renderMeeplesForPlayer = function (player) {
 	return A2(
 		_elm_lang$core$List$map,
 		function (m) {
-			return A2(_user$project$Main$renderMeeple, m, color);
+			return A2(_user$project$Clovece_View$renderMeeple, m, player);
 		},
 		player.meeplesPositions);
 };
-var _user$project$Main$renderBlock = function (model) {
+var _user$project$Clovece_View$renderBlock = function (model) {
 	return _elm_lang$core$List$concat(
 		{
 			ctor: '::',
@@ -9890,10 +9860,10 @@ var _user$project$Main$renderBlock = function (model) {
 				_elm_lang$core$List$map,
 				function (position) {
 					return A2(
-						_user$project$Main$renderCircle,
+						_user$project$Clovece_View$renderCircle,
 						position,
 						A2(
-							_user$project$Main$getColorForPosition,
+							_user$project$Clovece_View$getColorForPosition,
 							_elm_lang$core$Dict$values(model.players),
 							position));
 				},
@@ -9904,8 +9874,8 @@ var _user$project$Main$renderBlock = function (model) {
 					_elm_lang$core$List$map,
 					function (position) {
 						return A2(
-							_user$project$Main$renderText,
-							_user$project$Main$getCoordsForPosition(position),
+							_user$project$Clovece_View$renderText,
+							_user$project$Clovece_View$getCoordsForPosition(position),
 							_elm_lang$core$Basics$toString(position));
 					},
 					A2(_elm_lang$core$List$range, 0, 71)),
@@ -9914,7 +9884,7 @@ var _user$project$Main$renderBlock = function (model) {
 					_0: A2(
 						_elm_lang$core$List$concatMap,
 						function (p) {
-							return _user$project$Main$renderMeeplesForPlayer(p);
+							return _user$project$Clovece_View$renderMeeplesForPlayer(p);
 						},
 						_elm_lang$core$Dict$values(model.players)),
 					_1: {ctor: '[]'}
@@ -9922,7 +9892,7 @@ var _user$project$Main$renderBlock = function (model) {
 			}
 		});
 };
-var _user$project$Main$view = function (model) {
+var _user$project$Clovece_View$view = function (model) {
 	return A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
@@ -9949,23 +9919,26 @@ var _user$project$Main$view = function (model) {
 							_1: {ctor: '[]'}
 						}
 					},
-					_user$project$Main$renderBlock(model)),
+					_user$project$Clovece_View$renderBlock(model)),
 				_1: {
 					ctor: '::',
 					_0: A2(
 						_elm_lang$html$Html$map,
-						_user$project$Main$ChangeDice,
+						_user$project$Clovece_Update$ChangeDice,
 						_user$project$Dice$view(model.dice)),
 					_1: {ctor: '[]'}
 				}
 			}
 		});
 };
+var _user$project$Main$subscriptions = function (model) {
+	return _elm_lang$core$Platform_Sub$none;
+};
 var _user$project$Main$main = _elm_lang$html$Html$program(
 	{
-		init: {ctor: '_Tuple2', _0: _user$project$Main$init, _1: _elm_lang$core$Platform_Cmd$none},
-		update: _user$project$Main$update,
-		view: _user$project$Main$view,
+		init: {ctor: '_Tuple2', _0: _user$project$Clovece_Model$init, _1: _elm_lang$core$Platform_Cmd$none},
+		update: _user$project$Clovece_Update$update,
+		view: _user$project$Clovece_View$view,
 		subscriptions: _user$project$Main$subscriptions
 	})();
 var Elm = {};
